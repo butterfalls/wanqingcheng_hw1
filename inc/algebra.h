@@ -90,4 +90,10 @@ double trace_matrix(Matrix a);
 */
 void print_matrix(Matrix a);
 
+int min(int x, int y);
+
+void swap_rows(Matrix m, int row1, int row2);
+
+void copy_matrix(Matrix source, Matrix destination);
+
 #endif

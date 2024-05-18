@@ -2,13 +2,41 @@
  * @Author: butterfalls 1731860884@qq.com
  * @Date: 2024-05-18 16:49:56
  * @LastEditors: butterfalls 1731860884@qq.com
- * @LastEditTime: 2024-05-18 22:22:52
+ * @LastEditTime: 2024-05-18 23:00:41
+ * @FilePath: \hw1\src\algebra.c
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
+/*
+ * @Author: butterfalls 1731860884@qq.com
+ * @Date: 2024-05-18 16:49:56
+ * @LastEditors: butterfalls 1731860884@qq.com
+ * @LastEditTime: 2024-05-18 22:59:06
  * @FilePath: \hw1\src\algebra.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 #include "algebra.h"
 #include <stdio.h>
 #include <math.h>
+
+int min(int x, int y) {
+    return (x < y) ? x : y;
+}
+
+void swap_rows(Matrix m, int row1, int row2) {
+    for (int i = 0; i < m.cols; i++) {
+        double temp = m.data[row1][i];
+        m.data[row1][i] = m.data[row2][i];
+        m.data[row2][i] = temp;
+    }
+}
+
+void copy_matrix(Matrix source, Matrix destination) {
+    for (int i = 0; i < source.rows; i++) {
+        for (int j = 0; j < source.cols; j++) {
+            destination.data[i][j] = source.data[i][j];
+        }
+    }
+}
 
 Matrix create_matrix(int row, int col)
 {
@@ -141,7 +169,6 @@ double det_matrix(Matrix a)
         }
         sign = (j % 2 == 0) ? 1 : -1;
         det += sign * a.data[0][j] * det_matrix(submatrix);
-        free_matrix(submatrix);
     }
 
     return det;
@@ -150,13 +177,13 @@ double det_matrix(Matrix a)
 Matrix inv_matrix(Matrix a)
 {
     if (a.rows != a.cols) {
-        printf("Error: Matrix must be square to compute inverse.\n");
+        printf("Error: The matrix must be a square matrix.\n");
         return create_matrix(0, 0);
     }
 
     double det = det_matrix(a);
     if (det == 0.0) {
-        printf("Error: Matrix is not invertible (determinant is zero).\n");
+        printf("Error: The matrix must be a square matrix.\n");
         return create_matrix(0, 0);
     }
 
@@ -180,7 +207,6 @@ Matrix inv_matrix(Matrix a)
                 }
             }
             adjugate.data[j][i] = ((i + j) % 2 == 0) ? det_matrix(submatrix) : -det_matrix(submatrix);
-            free_matrix(submatrix);
         }
     }
 
@@ -222,7 +248,6 @@ int rank_matrix(Matrix a)
         }
     }
 
-    free_matrix(b);
     return rank;
 }
 
