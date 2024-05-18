@@ -2,7 +2,7 @@
  * @Author: butterfalls 1731860884@qq.com
  * @Date: 2024-05-18 16:49:56
  * @LastEditors: butterfalls 1731860884@qq.com
- * @LastEditTime: 2024-05-18 23:00:41
+ * @LastEditTime: 2024-05-18 23:52:52
  * @FilePath: \hw1\src\algebra.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -105,9 +105,10 @@ Matrix mul_matrix(Matrix a, Matrix b)
     {
         for (int j = 0; j < b.cols; j++)
         {
+            result.data[i][j] = 0;
             for (int k = 0; k < a.cols; k++)
             {
-                result.data[i][j] = a.data[i][k] * b.data[k][j];
+                result.data[i][j] += a.data[i][k] * b.data[k][j];
             }
         }
     }
@@ -253,16 +254,16 @@ int rank_matrix(Matrix a)
 
 double trace_matrix(Matrix a)
 {
+    if (a.rows != a.cols)
+    {
+        printf("Error: The matrix must be a square matrix.\n");
+        return 0.0;
+    }
+
     double trace = 0.0;
     for (int i=0; i < a.rows; i++)
     {
-        for (int j = 0; j < a.cols; j++)
-        {
-            if (i == j)
-            {
-                trace +=a.data[i][j];
-            }
-        }
+        trace += a.data[i][i];
     }
 
     return trace;
